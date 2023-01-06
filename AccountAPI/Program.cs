@@ -3,6 +3,7 @@ using Application.UseCase.AddCustomer;
 using Domain.Contracts.Repositories.AddCustomer;
 using Domain.Contracts.UseCase.AddCustomer;
 using FluentValidation;
+using Infra.Repository.DbContext;
 using Infra.Repository.Repositories.AddCustomer;
 using System.Globalization;
 
@@ -15,14 +16,15 @@ namespace AccountAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
-            builder.Services.AddSingleton<IAddCustomerRepository, AddCustomerRepository>();
+            builder.Services.AddSingleton<IDbContext, DbContext>();
+            builder.Services.AddScoped<IAddCustomerRepository, AddCustomerRepository>();
             builder.Services.AddScoped<IAddCustomerUseCase, AddCustomerUseCase>();
             builder.Services.AddTransient<IValidator<AddCustomerInput>, AddCustomerInputValidator>();
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            
             builder.Services.AddEndpointsApiExplorer();
+
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();

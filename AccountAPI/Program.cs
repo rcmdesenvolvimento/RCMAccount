@@ -1,7 +1,10 @@
+using AccountAPI.Models.AddCustomer;
 using Application.UseCase.AddCustomer;
 using Domain.Contracts.Repositories.AddCustomer;
 using Domain.Contracts.UseCase.AddCustomer;
+using FluentValidation;
 using Infra.Repository.Repositories.AddCustomer;
+using System.Globalization;
 
 namespace AccountAPI
 {
@@ -15,6 +18,7 @@ namespace AccountAPI
 
             builder.Services.AddSingleton<IAddCustomerRepository, AddCustomerRepository>();
             builder.Services.AddScoped<IAddCustomerUseCase, AddCustomerUseCase>();
+            builder.Services.AddTransient<IValidator<AddCustomerInput>, AddCustomerInputValidator>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -36,6 +40,10 @@ namespace AccountAPI
 
 
             app.MapControllers();
+
+            var cultureInfo = new CultureInfo("pt-BR");
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
             app.Run();
         }
